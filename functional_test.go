@@ -38,7 +38,7 @@ func TestEvery(t *testing.T) {
 	assert.True(t, res)
 
 	res = Every(MockRequest(), True, False, True)
-	assert.True(t, res)
+	assert.False(t, res)
 }
 
 func TestSome(t *testing.T) {
