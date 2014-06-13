@@ -6,17 +6,6 @@ import (
 	assert "github.com/pilu/miniassert"
 )
 
-var F = func(*Request) bool {
-	return true
-}
-
-var timesHandlerIsExecute = 0
-var Handler = func(req *Request, res Response) {
-	timesHandlerIsExecute++
-}
-
-var handlers = []HttpHandlerFunc{Handler, Handler, Handler}
-
 func TestNewRoute(t *testing.T) {
 	r := NewRoute(F, handlers...)
 	assert.Type(t, "*squish.Route", r)

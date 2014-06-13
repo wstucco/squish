@@ -6,14 +6,6 @@ import (
 	assert "github.com/pilu/miniassert"
 )
 
-var True = func(*Request) bool {
-	return true
-}
-
-var False = func(*Request) bool {
-	return false
-}
-
 func TestAnd(t *testing.T) {
 	res := And(MockRequest(), True, True, True)
 	assert.True(t, res)
