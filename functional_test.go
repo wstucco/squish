@@ -8,6 +8,7 @@ import (
 
 func TestAnd(t *testing.T) {
 	f := And(True, True, True)
+	assert.Type(t, "squish.RouteFunc", f)
 	assert.True(t, f(MockRequest()))
 
 	f = And(True, False, True)
@@ -16,6 +17,7 @@ func TestAnd(t *testing.T) {
 
 func TestOr(t *testing.T) {
 	f := Or(True, True, True)
+	assert.Type(t, "squish.RouteFunc", f)
 	assert.True(t, f(MockRequest()))
 
 	f = Or(True, False, True)
@@ -46,6 +48,7 @@ func TestSome(t *testing.T) {
 
 func TestNone(t *testing.T) {
 	f := None(True, True, True)
+	assert.Type(t, "squish.RouteFunc", f)
 	assert.False(t, f(MockRequest()))
 
 	f = None(True, False, True)
@@ -53,10 +56,15 @@ func TestNone(t *testing.T) {
 
 	f = None(False, False, False)
 	assert.True(t, f(MockRequest()))
+
+	// test that None is the opposite of Some
+	somef := Some(False, False, False)
+	assert.Equal(t, f(MockRequest()), !somef(MockRequest()))
 }
 
 func TestNot(t *testing.T) {
 	f := Not(None(True, True, True))
+	assert.Type(t, "squish.RouteFunc", f)
 	assert.True(t, f(MockRequest()))
 
 	f = Not(Every(True, False, True))
@@ -64,4 +72,7 @@ func TestNot(t *testing.T) {
 
 	f = Not(Or(False, False, False))
 	assert.True(t, f(MockRequest()))
+
+	orf := Or(False, False, False)
+	assert.Equal(t, f(MockRequest()), !orf(MockRequest()))
 }
