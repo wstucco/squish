@@ -7,50 +7,61 @@ import (
 )
 
 func TestAnd(t *testing.T) {
-	res := And(MockRequest(), True, True, True)
-	assert.True(t, res)
+	f := And(True, True, True)
+	assert.True(t, f(MockRequest()))
 
-	res = And(MockRequest(), True, False, True)
-	assert.False(t, res)
+	f = And(True, False, True)
+	assert.False(t, f(MockRequest()))
 }
 
 func TestOr(t *testing.T) {
-	res := Or(MockRequest(), True, True, True)
-	assert.True(t, res)
+	f := Or(True, True, True)
+	assert.True(t, f(MockRequest()))
 
-	res = Or(MockRequest(), True, False, True)
-	assert.True(t, res)
+	f = Or(True, False, True)
+	assert.True(t, f(MockRequest()))
 
-	res = Or(MockRequest(), False, False, False)
-	assert.False(t, res)
+	f = Or(False, False, False)
+	assert.False(t, f(MockRequest()))
 }
 
 func TestEvery(t *testing.T) {
-	res := Every(MockRequest(), True, True, True)
-	assert.True(t, res)
+	f := Every(True, True, True)
+	assert.True(t, f(MockRequest()))
 
-	res = Every(MockRequest(), True, False, True)
-	assert.False(t, res)
+	f = Every(True, False, True)
+	assert.False(t, f(MockRequest()))
 }
 
 func TestSome(t *testing.T) {
-	res := Or(MockRequest(), True, True, True)
-	assert.True(t, res)
+	f := Or(True, True, True)
+	assert.True(t, f(MockRequest()))
 
-	res = Or(MockRequest(), True, False, True)
-	assert.True(t, res)
+	f = Or(True, False, True)
+	assert.True(t, f(MockRequest()))
 
-	res = Or(MockRequest(), False, False, False)
-	assert.False(t, res)
+	f = Or(False, False, False)
+	assert.False(t, f(MockRequest()))
 }
 
 func TestNone(t *testing.T) {
-	res := None(MockRequest(), True, True, True)
-	assert.False(t, res)
+	f := None(True, True, True)
+	assert.False(t, f(MockRequest()))
 
-	res = None(MockRequest(), True, False, True)
-	assert.False(t, res)
+	f = None(True, False, True)
+	assert.False(t, f(MockRequest()))
 
-	res = None(MockRequest(), False, False, False)
-	assert.True(t, res)
+	f = None(False, False, False)
+	assert.True(t, f(MockRequest()))
+}
+
+func TestNot(t *testing.T) {
+	f := Not(None(True, True, True))
+	assert.True(t, f(MockRequest()))
+
+	f = Not(Every(True, False, True))
+	assert.True(t, f(MockRequest()))
+
+	f = Not(Or(False, False, False))
+	assert.True(t, f(MockRequest()))
 }

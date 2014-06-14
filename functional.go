@@ -1,35 +1,45 @@
 package squish
 
 // And and Or are aliases for Every and Some
-func And(r *Request, matchers ...RouteFunc) bool {
-	return Every(r, matchers...)
+func And(matchers ...RouteFunc) RouteFunc {
+	return Every(matchers...)
 }
 
-func Or(r *Request, matchers ...RouteFunc) bool {
-	return Some(r, matchers...)
+func Or(matchers ...RouteFunc) RouteFunc {
+	return Some(matchers...)
 }
 
-func Every(r *Request, matchers ...RouteFunc) bool {
-	for _, f := range matchers {
-		if !f(r) {
-			return false
+func Every(matchers ...RouteFunc) RouteFunc {
+	return func(r *Request) bool {
+		for _, f := range matchers {
+			if !f(r) {
+				return false
+			}
 		}
-	}
 
-	return true
+		return true
+	}
 }
 
-func Some(r *Request, matchers ...RouteFunc) bool {
-	for _, f := range matchers {
-		if f(r) {
-			return true
+func Some(matchers ...RouteFunc) RouteFunc {
+	return func(r *Request) bool {
+		for _, f := range matchers {
+			if f(r) {
+				return true
+			}
 		}
-	}
 
-	return false
+		return false
+	}
 }
 
 // None is the opposite of Some
-func None(r *Request, matchers ...RouteFunc) bool {
-	return !Some(r, matchers...)
+func None(matchers ...RouteFunc) RouteFunc {
+	return Not(Some(matchers...))
+}
+
+func Not(matcher RouteFunc) RouteFunc {
+	return func(r *Request) bool {
+		return !matcher(r)
+	}
 }
